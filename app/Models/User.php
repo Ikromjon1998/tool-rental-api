@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasRoles, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -50,20 +49,8 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function getJWTIdentifier()
-    {
-        // TODO: Implement getJWTIdentifier() method.
-    }
-
-    public function getJWTCustomClaims()
-    {
-        // TODO: Implement getJWTCustomClaims() method.
-    }
-
     /**
      * The attributes that should be cast.
-     *
-     * @return HasMany
      */
     public function bookings(): HasMany
     {
@@ -72,8 +59,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * The attributes that should be cast.
-     *
-     * @return HasMany
      */
     public function savedItems(): HasMany
     {
