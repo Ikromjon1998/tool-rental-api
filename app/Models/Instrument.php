@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Instrument extends Model implements HasMedia
 {
-    use SoftDeletes, InteractsWithMedia;
+    use InteractsWithMedia, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -30,8 +29,6 @@ class Instrument extends Model implements HasMedia
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @return void
      */
     public function registerMediaCollections(): void
     {
@@ -40,8 +37,6 @@ class Instrument extends Model implements HasMedia
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @return BelongsTo
      */
     public function category(): BelongsTo
     {
@@ -50,8 +45,6 @@ class Instrument extends Model implements HasMedia
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @return HasMany
      */
     public function bookings(): HasMany
     {

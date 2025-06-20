@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -51,8 +51,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be cast.
-     *
-     * @return HasMany
      */
     public function bookings(): HasMany
     {
@@ -61,8 +59,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be cast.
-     *
-     * @return HasMany
      */
     public function savedItems(): HasMany
     {

@@ -1,11 +1,10 @@
 <?php
 
-
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-return response()->json(['message' => 'Hello world!']);
+    return response()->json(['message' => 'Hello world!']);
 });
 
 Route::controller(AuthController::class)->group(function () {

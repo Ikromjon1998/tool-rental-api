@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Enums\UserRoleEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class AuthService
 {

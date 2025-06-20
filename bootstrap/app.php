@@ -32,4 +32,3 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json(['error' => 'Server Error'], 500);
         });
     })->create();
-
