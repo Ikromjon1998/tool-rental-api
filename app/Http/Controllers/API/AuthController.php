@@ -3,34 +3,43 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(private AuthService $authService){}
+
     public function register(Request $request): JsonResponse
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6,confirmed',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        DB::beginTransaction();
+        try {
+            $reply = $this->authService->register($data);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
 
-        $user->assignRole('customer');
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        return response()->json($reply, 201);
     }
 
     public function login(Request $request): JsonResponse
