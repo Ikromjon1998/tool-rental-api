@@ -72,6 +72,10 @@
         ],
         "phpstan": [
             "phpstan analyse --memory-limit=2G --configuration=phpstan.neon"
+        ],
+        "ci": [
+            "vendor/bin/pint --test -v",
+            "phpstan analyse --memory-limit=2G --configuration=phpstan.neon"
         ]
     },
     "extra": {
