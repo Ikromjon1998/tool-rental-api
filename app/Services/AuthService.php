@@ -44,7 +44,7 @@ class AuthService
 
     private function assignDefaultRole(User $user): void
     {
-        $user->assignRole(roles: UserRoleEnum::CUSTOMER->value, guard: 'api');
+        $user->assignRole(roles: UserRoleEnum::CUSTOMER->value);
     }
 
     private function logRegistration(User $user): void
