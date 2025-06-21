@@ -26,10 +26,8 @@ jobs:
 
       - name: Update Dependencies if Needed
         run: |
-          if ! composer check-platform-reqs > /dev/null 2>&1; then
-            echo "Running composer update due to lock file incompatibility"
-            composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          fi
+          composer check-platform-reqs || echo "Platform requirements mismatch"
+          composer update --no-ansi --no-interaction --no-scripts --prefer-dist || exit 1
 
       - name: Generate key
         run: php artisan key:generate
