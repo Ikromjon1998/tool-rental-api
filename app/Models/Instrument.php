@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -30,14 +31,6 @@ class Instrument extends Model implements HasMedia
     /**
      * The attributes that are mass assignable.
      */
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('images');
-    }
-
-    /**
-     * The attributes that are mass assignable.
-     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -49,5 +42,10 @@ class Instrument extends Model implements HasMedia
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function savedByUser(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'saved_items');
     }
 }
