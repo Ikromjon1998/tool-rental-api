@@ -27,7 +27,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Instrument extends Model implements HasMedia
 {
-    use InteractsWithMedia, SoftDeletes, Searchable;
+    use InteractsWithMedia, Searchable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -44,13 +44,11 @@ class Instrument extends Model implements HasMedia
     ];
 
     /**
-     * @var list<string>
+     * @var string[]
      */
-    protected $searchanble = [
+    protected $searchable = [
         'name',
         'description',
-        'category.name',
-        'category.description',
     ];
 
     /**

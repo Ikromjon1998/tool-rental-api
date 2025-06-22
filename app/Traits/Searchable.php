@@ -11,23 +11,23 @@ trait Searchable
     /**
      * Apply search scope to the query.
      *
-     * @param Builder<Model> $query
-     * @param string|null $term
+     * @param  Builder<Model>  $query
      * @return Builder<Model>
      */
     public function scopeSearch(Builder $query, ?string $term): Builder
     {
-        // Return immediately if no search term
         if (empty($term = trim($term))) {
             return $query;
         }
 
-        return $query->where(function ($q) use ($term) {
-            // Process each word in the search term
+        // Get searchable fields from model instance
+        $model = $query->getModel();
+        $fields = property_exists($model, 'searchable') ? $model->searchable : [];
+
+        return $query->where(function ($q) use ($term, $fields) {
             foreach ($this->normalizeSearchTerms($term) as $word) {
-                $q->where(function ($q) use ($word) {
-                    // Search in all searchable fields
-                    foreach ($this->getSearchableFields() as $field) {
+                $q->where(function ($q) use ($word, $fields) {
+                    foreach ($fields as $field) {
                         $this->applySearchCondition($q, $field, $word);
                     }
                 });
@@ -42,18 +42,8 @@ trait Searchable
     {
         return array_filter(
             array_map('trim', preg_split('/\s+/', $term)),
-            fn($word) => !empty($word)
+            fn ($word) => ! empty($word)
         );
-    }
-
-    /**
-     * Get searchable fields with fallback to model property.
-     */
-    protected function getSearchableFields(): array
-    {
-        return property_exists($this, 'searchable')
-            ? $this->searchable
-            : [];
     }
 
     /**
