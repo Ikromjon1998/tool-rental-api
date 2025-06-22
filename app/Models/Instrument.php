@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,7 +27,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Instrument extends Model implements HasMedia
 {
-    use InteractsWithMedia, SoftDeletes;
+    use InteractsWithMedia, SoftDeletes, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +41,16 @@ class Instrument extends Model implements HasMedia
         'bought_at',
         'first_used_at',
         'category_id',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected $searchanble = [
+        'name',
+        'description',
+        'category.name',
+        'category.description',
     ];
 
     /**

@@ -30,6 +30,7 @@ class InstrumentController extends Controller
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('category_id'),
+                AllowedFilter::scope('search'), // Custom scope for searching by name or description
             ])
             ->allowedSorts(['name', 'created_at'])
             ->allowedIncludes(['category', 'bookings'])
