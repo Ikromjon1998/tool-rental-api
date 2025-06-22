@@ -8,17 +8,21 @@ use App\Http\Resources\Instrument\InstrumentCollection;
 use App\Http\Resources\Instrument\InstrumentResource;
 use App\Models\Instrument;
 use App\Services\InstrumentService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class InstrumentController extends Controller
 {
-    public function __construct(private InstrumentService $instrumentService) {}
+    /**
+     * InstrumentController constructor.
+     */
+    public function __construct(private readonly InstrumentService $instrumentService) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): InstrumentCollection
     {
         // implementation of Spatie query builder
         $instruments = QueryBuilder::for(Instrument::class)
@@ -32,7 +36,7 @@ class InstrumentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse|InstrumentResource
     {
         $validatedData = $request->validated();
 
@@ -55,15 +59,21 @@ class InstrumentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, Instrument $instrument)
+    public function update(UpdateRequest $request, Instrument $instrument): JsonResponse|InstrumentResource
     {
         $validatedData = $request->validated();
 
         try {
             $instrument = $this->instrumentService->update($instrument, $validatedData);
         } catch (\Exception $e) {
-            // Handle exception, log error, etc.
-            return response()->json(['error' => 'Failed to update instrument'], 500);
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ],
+            ], 500);
         }
 
         return new InstrumentResource($instrument);
@@ -72,13 +82,19 @@ class InstrumentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Instrument $instrument)
+    public function destroy(Instrument $instrument): JsonResponse
     {
         try {
             $this->instrumentService->delete($instrument);
         } catch (\Exception $e) {
-            // Handle exception, log error, etc.
-            return response()->json(['error' => 'Failed to delete instrument'], 500);
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ],
+            ], 500);
         }
 
         return response()->json(['message' => 'Instrument deleted successfully'], 204);

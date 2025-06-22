@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Category\StoreRequest;
+use App\Http\Requests\Category\UpdateRequest;
 use App\Http\Resources\Category\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Services\CategoryService;
+use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CategoryController extends Controller
 {
+    /**
+     * CategoryController constructor.
+     */
+    public function __construct(private readonly CategoryService $categoryService) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -37,14 +44,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): CategoryResource
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
         ]);
 
-        $category = Category::create($request->only(['name', 'description']));
+        $category = $this->categoryService->create($request->validated());
 
         return new CategoryResource($category);
     }
@@ -60,14 +67,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateRequest $request, Category $category): CategoryResource
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-        ]);
-
-        $category->update($request->only(['name', 'description']));
+        $category = $this->categoryService->update($category, $request->validated());
 
         return new CategoryResource($category);
     }
@@ -75,10 +77,12 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category): Response
+    public function destroy(Category $category): JsonResponse
     {
-        $category->delete();
+        $this->categoryService->delete($category);
 
-        return response('', ResponseAlias::HTTP_NO_CONTENT);
+        return response()->json([
+            'message' => 'Category deleted successfully.',
+        ], ResponseAlias::HTTP_NO_CONTENT);
     }
 }
