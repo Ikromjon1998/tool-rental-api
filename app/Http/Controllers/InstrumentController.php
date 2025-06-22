@@ -10,6 +10,7 @@ use App\Models\Instrument;
 use App\Services\InstrumentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class InstrumentController extends Controller
@@ -26,8 +27,12 @@ class InstrumentController extends Controller
     {
         // implementation of Spatie query builder
         $instruments = QueryBuilder::for(Instrument::class)
-            ->allowedFilters(['name', 'category.name'])
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('category_id'),
+            ])
             ->allowedSorts(['name', 'created_at'])
+            ->allowedIncludes(['category', 'bookings'])
             ->paginate(12);
 
         return new InstrumentCollection($instruments);
