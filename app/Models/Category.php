@@ -22,7 +22,7 @@ class Category extends Model
     /**
      * Get the instruments that belong to the category.
      *
-     * @return HasMany<Instrument>
+     * @return HasMany<Instrument, Category>
      */
     public function instruments(): HasMany
     {

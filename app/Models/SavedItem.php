@@ -15,7 +15,7 @@ class SavedItem extends Model
     /**
      * Get the user that saved the item.
      *
-     * @return BelongsTo<User>
+     * @return BelongsTo<User, self>
      */
     public function user(): BelongsTo
     {
@@ -25,7 +25,7 @@ class SavedItem extends Model
     /**
      * Get the instrument that was saved.
      *
-     * @return BelongsTo<Instrument>
+     * @return BelongsTo<Instrument, self>
      */
     public function instrument(): BelongsTo
     {

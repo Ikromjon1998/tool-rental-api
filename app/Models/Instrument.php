@@ -38,12 +38,19 @@ class Instrument extends Model implements HasMedia
 
     /**
      * The attributes that are mass assignable.
+     *
+     * @return HasMany<Booking, Instrument>
      */
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @return BelongsToMany<User, Instrument>
+     */
     public function savedByUser(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'saved_items');

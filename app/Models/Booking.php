@@ -20,7 +20,7 @@ class Booking extends Model
     /**
      * Get the user that owns the booking.
      *
-     * @return BelongsTo<User>
+     * @return BelongsTo<User, Booking>
      */
     public function user(): BelongsTo
     {
@@ -30,7 +30,7 @@ class Booking extends Model
     /**
      * Get the instrument that belongs to the booking.
      *
-     * @return BelongsTo<Instrument>
+     * @return BelongsTo<Instrument, Booking>
      */
     public function instrument(): BelongsTo
     {
