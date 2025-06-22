@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * $table->string('icon')->nullable()->after('description');
  * $table->boolean('is_active')->default(true)->after('icon');
  * $table->integer('sort_order')->default(0)->after('is_active');
- *
  */
 class Category extends Model
 {
