@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InstrumentController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,10 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::apiResources([
     'instruments' => InstrumentController::class,
-]);
+    'categories' => CategoryController::class,
+],
+    ['except' => ['show']]
+);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
