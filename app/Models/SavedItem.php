@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $user_id
+ * @property int $instrument_id
+ * @property-read User $user
+ * @property-read Instrument $instrument
+ */
 class SavedItem extends Model
 {
     use HasFactory;
@@ -19,6 +25,7 @@ class SavedItem extends Model
      */
     public function user(): BelongsTo
     {
+        /** @var BelongsTo<User, self> */
         return $this->belongsTo(User::class);
     }
 
@@ -29,6 +36,7 @@ class SavedItem extends Model
      */
     public function instrument(): BelongsTo
     {
+        /** @var BelongsTo<Instrument, self> */
         return $this->belongsTo(Instrument::class);
     }
 }

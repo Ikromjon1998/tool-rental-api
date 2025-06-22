@@ -10,6 +10,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property float $price
+ * @property \Illuminate\Support\Carbon|null $bought_at
+ * @property \Illuminate\Support\Carbon|null $first_used_at
+ * @property int|null $category_id
+ * @property-read Category|null $category
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Booking> $bookings
+ * @property-read int|null $bookings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $savedByUser
+ * @property-read int|null $saved_by_user_count
+ */
 class Instrument extends Model implements HasMedia
 {
     use InteractsWithMedia, SoftDeletes;
@@ -33,6 +47,7 @@ class Instrument extends Model implements HasMedia
      */
     public function category(): BelongsTo
     {
+        /** @var BelongsTo<Category, self> */
         return $this->belongsTo(Category::class);
     }
 
@@ -43,6 +58,7 @@ class Instrument extends Model implements HasMedia
      */
     public function bookings(): HasMany
     {
+        /** @var HasMany<Booking, self> */
         return $this->hasMany(Booking::class);
     }
 
@@ -53,6 +69,7 @@ class Instrument extends Model implements HasMedia
      */
     public function savedByUser(): BelongsToMany
     {
+        /** @var BelongsToMany<User, self> */
         return $this->belongsToMany(User::class, 'saved_items');
     }
 }

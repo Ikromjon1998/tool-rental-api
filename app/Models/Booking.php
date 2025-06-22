@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $user_id
+ * @property int $instrument_id
+ * @property string $start_date
+ * @property string $end_date
+ * @property string $status
+ * @property-read User $user
+ * @property-read Instrument $instrument
+ */
 class Booking extends Model
 {
     use HasFactory;
@@ -24,6 +33,7 @@ class Booking extends Model
      */
     public function user(): BelongsTo
     {
+        /** @var BelongsTo<User, self> */
         return $this->belongsTo(User::class);
     }
 
@@ -34,6 +44,7 @@ class Booking extends Model
      */
     public function instrument(): BelongsTo
     {
+        /** @var BelongsTo<Instrument, self> */
         return $this->belongsTo(Instrument::class);
     }
 }
