@@ -15,6 +15,12 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class CategoryController extends Controller
 {
     /**
+     * Default number of items per page for pagination.
+     * This can be overridden by the "per_page" query parameter in the request.
+     */
+    const DEFAULT_PER_PAGE = 2; // Default number of items per page for pagination
+
+    /**
      * CategoryController constructor.
      */
     public function __construct(private readonly CategoryService $categoryService) {}
@@ -29,7 +35,7 @@ class CategoryController extends Controller
          * Allows flexible querying of categories with filtering by name/description.
          * The page size can be customized via the "per_page" query parameter.
          */
-        $perPage = request()->get('per_page', 2); // Default is 2 if not provided
+        $perPage = request()->get('per_page', self::DEFAULT_PER_PAGE);
 
         $categories = QueryBuilder::for(Category::class)
             ->allowedFilters(['name', 'description'])
@@ -46,11 +52,6 @@ class CategoryController extends Controller
      */
     public function store(StoreRequest $request): CategoryResource
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-        ]);
-
         $category = $this->categoryService->create($request->validated());
 
         return new CategoryResource($category);
